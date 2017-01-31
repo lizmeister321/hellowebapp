@@ -1,7 +1,8 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Homepage - {{ block.super }}{% endblock %}
 {% block content %}
-	<h1>Hello World!</h1>
-	<p>here is a number: {{number}}</p>
-	<p>This is a test: {{ thing|title }} </p>
+	{% for thing in things %}
+	<h2>{{ thing.name }}</h2>
+	<P>{{ thing.description }}</P>
+	{% endfor %}
 {% endblock %}
