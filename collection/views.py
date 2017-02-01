@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from collection.forms import ThingForm
 from collection.models import Thing
+from django.template.defaultfilters import slugify
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 # Create your views here.
 def index(request):
@@ -17,9 +20,14 @@ def thing_detail(request, slug):
 	return render(request, 'things/thing_detail.html', {'thing': thing,
 		})
 
+@login_required
 def edit_thing(request, slug):
 
 	thing = Thing.objects.get(slug=slug)
+	#make sure the logged-in user is the owner of the thing
+	if thing.user != request.user:
+		raise Http404
+		
 	form_class = ThingForm
 
 	if request.method == 'POST':
@@ -34,3 +42,24 @@ def edit_thing(request, slug):
 		'thing': thing,
 		'form' : form,
 		})
+
+def create_thing(request):
+	form_class = ThingForm
+	#if we're coming from a submitted form, do this
+	if request.method == 'POST':
+		#grab the data from the submitted form and apply to the form
+		form = form_class(request.POST)
+		if form.is_valid():
+			#create an instance but do not save yet
+			thing = form.save(commit=False)
+			#set additional details
+			thing.user = request.user
+			thing.slug = slugify(thing.name)
+			#save the object
+			thing.save()
+			return redirect('thing_detail', slug=thing.slug)
+	else: form = form_class()
+	return render(request, 'things/create_thing.html', {
+		'form':form
+		})
+
