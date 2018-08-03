@@ -3,10 +3,18 @@
 <!doctype html>
 <html>
 <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel = "stylesheet" href="{% static 'css/style.css' %}" />
+
 	<title> 
 		{% block title %}My Hello Web App Project {% endblock %}
 	</title>
-	<link rel = "stylesheet" href="{% static 'css/style.css' %}" />
 	{% block header %}{% endblock %}
 </head>
 <body>
